@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PASCAL — 구조로 완성하는 공간</title>
+  <meta name="description" content="건축구조기술사가 이끄는 맞춤형 구조물 설계·제작 전문 기업 (주)파스칼">
+
+  <!-- Pretendard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+  <!-- Outfit (English display font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Iconify Solar -->
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────── -->
+  <header class="site-nav" id="siteNav">
+    <div class="nav-inner container">
+
+      <!-- 로고 -->
+      <a href="#" class="nav-logo" aria-label="PASCAL 홈으로">PASCAL</a>
+
+      <!-- 데스크톱 메뉴 -->
+      <nav class="nav-menu" aria-label="주요 메뉴">
+        <ul class="nav-links">
+          <li><a href="#service">SERVICE</a></li>
+          <li><a href="#portfolio">PORTFOLIO</a></li>
+          <li><a href="#process">PROCESS</a></li>
+          <li><a href="#about">ABOUT</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+        </ul>
+      </nav>
+
+      <!-- 햄버거 버튼 (모바일) -->
+      <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── 모바일 풀스크린 메뉴 ──────────────────────────── -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="모바일 메뉴">
+      <ul class="mobile-links">
+        <li style="--i:0"><a href="#service">SERVICE</a></li>
+        <li style="--i:1"><a href="#portfolio">PORTFOLIO</a></li>
+        <li style="--i:2"><a href="#process">PROCESS</a></li>
+        <li style="--i:3"><a href="#about">ABOUT</a></li>
+        <li style="--i:4"><a href="#contact">CONTACT</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main></main>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+/* ============================================================
+   PASCAL Homepage — Global Styles
+   ============================================================ */
+
+/* ── 1. CSS 변수 ────────────────────────────────────────────── */
+:root {
+  /* Brand Colors */
+  --color-primary:   #0253A5; /* PASCAL Blue */
+  --color-dark:      #001B3D; /* Deep Navy */
+  --color-bg:        #F8F9FA; /* Snow White */
+  --color-white:     #FFFFFF;
+  --color-accent:    #FF9800; /* Warm Orange — CTA hover 전용 */
+  --color-text:      #1A1A2E; /* Charcoal */
+  --color-subtext:   #6B7280; /* Mid Gray */
+  --color-divider:   #E5E7EB; /* Light Gray */
+
+  /* Typography */
+  --font-korean:  'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-english: 'Outfit', var(--font-korean);
+
+  /* Section Spacing */
+  --section-padding-y: 120px;
+  --section-padding-x: 40px;
+
+  /* Card */
+  --card-padding:      40px;
+  --card-shadow:       0 1px 3px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 20px 40px rgba(2, 83, 165, 0.12);
+  --card-radius:       16px;
+
+  /* Button */
+  --btn-shadow: 0 4px 14px rgba(2, 83, 165, 0.3);
+
+  /* Navigation */
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --nav-blur: blur(20px);
+
+  /* Animation */
+  --transition-base: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── 2. Reset ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+}
+
+/* ── 3. Body 기본 ───────────────────────────────────────────── */
+body {
+  font-family: var(--font-korean);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-white);
+  word-break: keep-all;
+  overflow-x: hidden;
+}
+
+/* ── 4. 섹션 공통 ───────────────────────────────────────────── */
+section {
+  padding: var(--section-padding-y) var(--section-padding-x);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── 5. 스크롤 진입 애니메이션 기반 ────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── 6. 네비게이션 ──────────────────────────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-nav.scrolled {
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: var(--nav-blur);
+  backdrop-filter: var(--nav-blur);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 var(--section-padding-x);
+}
+
+/* 로고 */
+.nav-logo {
+  font-family: var(--font-english);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+  transition: opacity 0.3s ease;
+}
+
+.nav-logo:hover {
+  opacity: 0.75;
+}
+
+/* 데스크톱 링크 */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.nav-links a {
+  font-family: var(--font-english);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--color-text);
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--color-primary);
+}
+
+/* 햄버거 버튼 */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* 햄버거 → X 변환 */
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── 7. 모바일 풀스크린 메뉴 ────────────────────────────────── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.mobile-links li {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: calc(var(--i) * 60ms);
+}
+
+.mobile-menu.open .mobile-links li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-links a {
+  font-family: var(--font-english);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 0.12em;
+  color: var(--color-text);
+  transition: color 0.3s ease;
+}
+
+.mobile-links a:hover {
+  color: var(--color-primary);
+}
+
+/* ── 8. 반응형 ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --section-padding-y: 80px;
+    --section-padding-x: 20px;
+    --card-padding:      28px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+}
