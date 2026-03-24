@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PASCAL — 구조로 완성하는 공간, 설계부터 제작까지</title>
+  <meta name="description" content="(주)파스칼은 건축구조기술사가 이끄는 맞춤형 구조물 설계·제작 전문 기업입니다. 개구부 보강부터 특수 구조물까지, 기술사가 직접 검토하고 날인합니다.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+            display: ['Outfit', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: #080808;
+      color: #ffffff;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .font-display { font-family: 'Outfit', system-ui, sans-serif; }
+
+    /* Korean text */
+    .ko {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* Colors */
+    .text-gold  { color: #C9A96E; }
+    .bg-gold    { background-color: #C9A96E; }
+    .border-gold { border-color: #C9A96E; }
+
+    /* Grain overlay */
+    #grain {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0.3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 180px;
+    }
+
+    /* Mesh orb */
+    .mesh-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(130px);
+      pointer-events: none;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(2rem);
+      filter: blur(4px);
+      transition:
+        opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+
+    /* Double-bezel card */
+    .card-outer {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 5px;
+      border-radius: 1.5rem;
+    }
+    .card-inner {
+      background: rgba(255,255,255,0.04);
+      border-radius: calc(1.5rem - 5px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.08);
+    }
+
+    /* Nav link underline */
+    .nav-link { position: relative; transition: color 0.35s ease; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: #C9A96E;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(8, 8, 8, 0.97);
+      backdrop-filter: blur(40px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+
+    .mm-link {
+      opacity: 0;
+      transform: translateY(2rem);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.3s ease;
+    }
+    .mobile-menu.open .mm-link { opacity: 1; transform: translateY(0); }
+    .mobile-menu.open .mm-link:nth-child(1) { transition-delay: 0.08s; }
+    .mobile-menu.open .mm-link:nth-child(2) { transition-delay: 0.15s; }
+    .mobile-menu.open .mm-link:nth-child(3) { transition-delay: 0.22s; }
+    .mobile-menu.open .mm-link:nth-child(4) { transition-delay: 0.29s; }
+    .mobile-menu.open .mm-link:nth-child(5) { transition-delay: 0.36s; }
+
+    /* Marquee */
+    .marquee-container { overflow: hidden; white-space: nowrap; }
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 38s linear infinite;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Portfolio hover */
+    .portfolio-item { position: relative; overflow: hidden; }
+    .portfolio-item img {
+      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .portfolio-item:hover img { transform: scale(1.06); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.1) 55%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.75rem;
+      transform: translateY(0.75rem); opacity: 0;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .portfolio-item:hover .portfolio-info { transform: translateY(0); opacity: 1; }
+
+    /* Service card image zoom */
+    .svc-img { transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+    .svc-card:hover .svc-img { transform: scale(1.05); }
+
+    /* CTA button glow */
+    .btn-gold {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-gold:hover {
+      transform: scale(1.025);
+      box-shadow: 0 0 50px rgba(201,169,110,0.38);
+    }
+    .btn-gold:active { transform: scale(0.97); }
+
+    .btn-ghost {
+      transition: color 0.4s ease, border-color 0.4s ease;
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    /* Arrow shift on hover */
+    .arrow-wrap { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    *:hover > .arrow-wrap { transform: translateX(3px); }
+
+    /* Progress bars */
+    .bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: #C9A96E;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #080808; }
+    ::-webkit-scrollbar-thumb { background: #C9A96E; border-radius: 2px; }
+
+    /* Selection */
+    ::selection { background: rgba(201,169,110,0.28); color: #fff; }
+
+    /* Float animation for orbs */
+    @keyframes float-a {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-18px); }
+    }
+    @keyframes float-b {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-12px); }
+    }
+    .float-a { animation: float-a 9s ease-in-out infinite; }
+    .float-b { animation: float-b 12s ease-in-out infinite 2s; }
+
+    /* Scroll indicator bounce */
+    @keyframes bounce-y {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+    .bounce-y { animation: bounce-y 1.8s ease-in-out infinite; }
+
+    /* Hero canvas loader spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .hero-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(201,169,110,0.2);
+      border-top-color: #C9A96E;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Promise big number */
+    .promise-num {
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: clamp(3.5rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #C9A96E;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grain Overlay -->
+  <div id="grain"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       NAVIGATION — Floating glass pill
+  ═══════════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-4 left-0 right-0 z-40 flex justify-center" style="transition: all 0.5s cubic-bezier(0.16,1,0.3,1);">
+    <div id="nav-pill" class="flex items-center gap-6 px-5 py-3 rounded-full"
+         style="backdrop-filter: blur(24px); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); box-shadow: inset 0 1px 0 rgba(255,255,255,0.07); transition: all 0.5s cubic-bezier(0.16,1,0.3,1);">
+
+      <!-- Logo -->
+      <a href="#" class="font-display font-bold text-lg tracking-[0.2em] text-white">PASCAL</a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-5">
+        <a href="#services"   class="nav-link text-[13px] text-white/55 hover:text-white">서비스</a>
+        <a href="#work"       class="nav-link text-[13px] text-white/55 hover:text-white">포트폴리오</a>
+        <a href="#process"    class="nav-link text-[13px] text-white/55 hover:text-white">프로세스</a>
+        <a href="#about"      class="nav-link text-[13px] text-white/55 hover:text-white">회사소개</a>
+      </div>
+
+      <!-- CTA -->
+      <a href="#contact"
+         class="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-gold text-[#080808] text-[13px] font-semibold btn-gold">
+        문의하기
+        <span class="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center">
+          <iconify-icon icon="solar:arrow-right-linear" width="10"></iconify-icon>
+        </span>
+      </a>
+
+      <!-- Hamburger -->
+      <button id="menuToggle" class="md:hidden flex flex-col gap-[5px] w-5" aria-label="메뉴 열기">
+        <span class="h-px w-full bg-white/70" id="hb1"
+              style="transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;"></span>
+        <span class="h-px w-3/4 bg-white/70" id="hb2"
+              style="transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;"></span>
+        <span class="h-px w-1/2 bg-white/70" id="hb3"
+              style="transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenu" class="mobile-menu">
+    <button id="menuClose" class="absolute top-7 right-7 w-10 h-10 flex items-center justify-center text-white/50 hover:text-white"
+            style="transition: color 0.3s ease;" aria-label="메뉴 닫기">
+      <iconify-icon icon="solar:close-circle-linear" width="26"></iconify-icon>
+    </button>
+
+    <div class="flex flex-col items-center gap-7">
+      <a href="#services" class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">서비스</a>
+      <a href="#work"     class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">포트폴리오</a>
+      <a href="#process"  class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">프로세스</a>
+      <a href="#about"    class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">회사소개</a>
+      <a href="#contact"
+         class="mm-link mt-3 flex items-center gap-3 px-8 py-4 rounded-full bg-gold text-[#080808] font-semibold text-lg btn-gold"
+         onclick="closeMobileMenu()">
+        프로젝트 문의하기
+        <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center">
+          <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>
+        </span>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1 · HERO — Scroll Canvas Animation
+  ═══════════════════════════════════════════════ -->
+  <section id="hero-section" class="relative" style="min-height: 300vh; background: #080808;">
+
+    <!-- Background mesh orbs (scroll with page) -->
+    <div class="mesh-orb float-a w-[700px] h-[700px] bg-[#C9A96E] opacity-[0.035]"
+         style="position: absolute; top: -180px; left: -260px;"></div>
+    <div class="mesh-orb float-b w-[450px] h-[450px] bg-[#C9A96E] opacity-[0.045]"
+         style="position: absolute; bottom: 0; right: -140px;"></div>
+
+    <!-- Sticky viewport container -->
+    <div style="position: sticky; top: 0; height: 100vh; overflow: hidden;">
+
+      <!-- Loading indicator -->
+      <div id="heroLoader" style="position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: #080808; transition: opacity 0.5s ease;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+          <div class="hero-spinner"></div>
+          <span style="color: rgba(201,169,110,0.6); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-family: 'Outfit', system-ui, sans-serif;">Loading</span>
+        </div>
+      </div>
+
+      <!-- Scroll-driven canvas -->
+      <canvas id="heroCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%;"></canvas>
+
+      <!-- Gradient overlays for text legibility -->
+      <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(8,8,8,0.80) 0%, rgba(8,8,8,0.40) 55%, rgba(8,8,8,0.10) 100%); pointer-events: none;"></div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,0.55) 0%, transparent 50%); pointer-events: none;"></div>
+
+      <!-- Content overlay -->
+      <div class="relative h-full flex items-center" style="z-index: 10; pointer-events: none;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-28 pb-20" style="pointer-events: auto;">
+          <div style="max-width: 600px;">
+
+            <!-- Eyebrow -->
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-7"
+                 style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+              <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">Structural Design &amp; DfMA Solutions</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="reveal d1 font-display font-bold text-white ko"
+                style="font-size: clamp(2.8rem, 6vw, 5.5rem); line-height: 1.08; word-break: keep-all;">
+              구조로<br>
+              <span class="text-gold">완성</span>하는<br>
+              공간
+            </h1>
+
+            <!-- Sub-copy -->
+            <p class="reveal d2 ko text-white/45 leading-relaxed mt-6 mb-10"
+               style="font-size: 1rem; max-width: 50ch; word-break: keep-all;">
+              설계부터 제작까지 — 건축구조기술사가 이끄는 맞춤형 구조물 설계·제작 전문 기업. 모든 프로젝트를 기술사가 직접 검토하고 날인합니다.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="reveal d3 flex flex-col sm:flex-row gap-4">
+              <a href="#contact"
+                 class="group flex items-center gap-3 px-8 py-4 rounded-full bg-gold text-[#080808] font-semibold btn-gold">
+                프로젝트 문의하기
+                <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center arrow-wrap">
+                  <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>
+                </span>
+              </a>
+              <a href="#about"
+                 class="flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-white/65 btn-ghost"
+                 style="border: 1px solid rgba(255,255,255,0.14);">
+                회사 소개
+              </a>
+            </div>
+
+            <!-- Stats row -->
+            <div class="reveal d4 flex items-center gap-8 mt-12 pt-10"
+                 style="border-top: 1px solid rgba(255,255,255,0.07);">
+              <div>
+                <p class="font-display text-3xl font-bold text-white">DfMA</p>
+                <p class="text-white/38 text-xs mt-1 ko" style="word-break: keep-all;">기반 설계·제작 일원화</p>
+              </div>
+              <div class="w-px h-9" style="background: rgba(255,255,255,0.09);"></div>
+              <div>
+                <p class="font-display text-3xl font-bold text-white">PE</p>
+                <p class="text-white/38 text-xs mt-1 ko" style="word-break: keep-all;">기술사 직접 날인</p>
+              </div>
+              <div class="w-px h-9" style="background: rgba(255,255,255,0.09);"></div>
+              <div>
+                <p class="font-display text-3xl font-bold text-white">6<span class="text-lg font-light text-white/40">종</span></p>
+                <p class="text-white/38 text-xs mt-1 ko" style="word-break: keep-all;">구조물 전문 서비스</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 reveal d5" style="z-index: 10;">
+        <span class="text-white/25 text-[10px] uppercase tracking-[0.2em]">scroll</span>
+        <iconify-icon icon="solar:arrow-down-linear" width="15" class="text-white/25 bounce-y"></iconify-icon>
+      </div>
+
+    </div><!-- /sticky -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 · CLIENT TRUST STRIP — Marquee
+  ═══════════════════════════════════════════════ -->
+  <section style="background: #0c0c0c; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);"
+           class="py-10 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-7">
+      <p class="text-center text-white/22 text-[10px] uppercase tracking-[0.28em]">함께한 파트너사</p>
+    </div>
+
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <span class="inline-flex items-center gap-12 px-6">
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">현대건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">삼성물산</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">DL이앤씨</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">GS건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">포스코이앤씨</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">롯데건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">HDC현대산업개발</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">SK에코플랜트</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">한화건설</span>
+          <span class="text-white/10 text-xl">/</span>
+        </span>
+        <!-- Duplicate for seamless loop -->
+        <span class="inline-flex items-center gap-12 px-6">
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">현대건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">삼성물산</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">DL이앤씨</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">GS건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">포스코이앤씨</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">롯데건설</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">HDC현대산업개발</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">SK에코플랜트</span>
+          <span class="text-white/10 text-xl">/</span>
+          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">한화건설</span>
+          <span class="text-white/10 text-xl">/</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3 · SERVICES — Asymmetric Bento Grid
+  ═══════════════════════════════════════════════ -->
+  <section id="services" style="background: #080808;" class="py-32 lg:py-44">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-14 lg:mb-18">
+        <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+             style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+          <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">전문 서비스</span>
+        </div>
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+          <h2 class="reveal d1 font-display font-bold text-white ko"
+              style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.12; word-break: keep-all;">
+            우리가 설계하고<br>제작하는 여섯 가지 구조물
+          </h2>
+          <p class="reveal d2 text-white/38 text-sm leading-relaxed ko"
+             style="max-width: 38ch; word-break: keep-all;">
+            각 구조물의 하중 조건과 환경을 분석하고, 기술사가 직접 검토한 설계를 제작까지 일원화합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Bento grid: Row 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+
+        <!-- Card A: OPENING (lg col-span-2, tall) -->
+        <div class="reveal lg:col-span-2 card-outer svc-card cursor-pointer" style="position: relative;">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 340px;">
+              <img src="https://picsum.photos/seed/pascal-opening-rebar/1100/680"
+                   alt="개구부 구조보강" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, #080808 0%, rgba(8,8,8,0.25) 50%, transparent 100%);"></div>
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 60%);"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-7 lg:p-9">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-4"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                OPENING
+              </span>
+              <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-2.5 ko"
+                  style="word-break: keep-all;">개구부 구조보강</h3>
+              <p class="text-white/45 text-sm leading-relaxed ko"
+                 style="max-width: 48ch; word-break: keep-all;">
+                벽·슬래브 개구부 보강, 철골 프레임, 안전 구조 설계. 기존 구조체를 안전하게 변형합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card B: INTERIOR -->
+        <div class="reveal d1 card-outer svc-card cursor-pointer">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 180px;">
+              <img src="assets/interior.png"
+                   alt="실내 구조물 설치" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+            </div>
+            <div class="p-6 lg:p-7">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                INTERIOR
+              </span>
+              <h3 class="font-display text-xl font-bold text-white mb-2 ko"
+                  style="word-break: keep-all;">실내 구조물 설치</h3>
+              <p class="text-white/40 text-[13px] leading-relaxed ko"
+                 style="word-break: keep-all;">
+                계단, 난간, 파티션, 스크린, 실내 금속 구조물 설계·제작·설치.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento grid: Row 2 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+
+        <!-- Card C: OUTDOOR -->
+        <div class="reveal card-outer svc-card cursor-pointer">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 180px;">
+              <img src="https://picsum.photos/seed/pascal-outdoor-canopy/600/360"
+                   alt="야외 구조물·조형물" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+            </div>
+            <div class="p-6 lg:p-7">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                OUTDOOR
+              </span>
+              <h3 class="font-display text-xl font-bold text-white mb-2 ko"
+                  style="word-break: keep-all;">야외 구조물·조형물</h3>
+              <p class="text-white/40 text-[13px] leading-relaxed ko"
+                 style="word-break: keep-all;">
+                캐노피, 파사드, 데크, 외부 설치 구조물. 풍하중·적설하중을 반영한 구조 설계.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card D: SUSPENDED -->
+        <div class="reveal d1 card-outer svc-card cursor-pointer">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 180px;">
+              <img src="https://picsum.photos/seed/pascal-suspended-ceiling/600/360"
+                   alt="매달림 구조물·조형물" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+            </div>
+            <div class="p-6 lg:p-7">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                SUSPENDED
+              </span>
+              <h3 class="font-display text-xl font-bold text-white mb-2 ko"
+                  style="word-break: keep-all;">매달림 구조물·조형물</h3>
+              <p class="text-white/40 text-[13px] leading-relaxed ko"
+                 style="word-break: keep-all;">
+                천장 매달림 조형물, 현수 구조, 설치미술 프레임. 하중 분산과 접합부 안전을 검토합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card E: MODULAR -->
+        <div class="reveal d2 card-outer svc-card cursor-pointer">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 180px;">
+              <img src="https://picsum.photos/seed/pascal-modular-booth/600/360"
+                   alt="모듈러 구조 시스템" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+            </div>
+            <div class="p-6 lg:p-7">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                MODULAR
+              </span>
+              <h3 class="font-display text-xl font-bold text-white mb-2 ko"
+                  style="word-break: keep-all;">모듈러 구조 시스템</h3>
+              <p class="text-white/40 text-[13px] leading-relaxed ko"
+                 style="word-break: keep-all;">
+                반복 조립형 유닛, 모듈러 부스·파빌리온. DfMA 원칙으로 현장 시공 시간을 최소화합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento grid: Row 3 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Card F: ENGINEERED (lg col-span-2) -->
+        <div class="reveal lg:col-span-2 card-outer svc-card cursor-pointer" style="position: relative;">
+          <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+            <div class="relative overflow-hidden" style="height: 260px;">
+              <img src="https://picsum.photos/seed/pascal-engineered-special/1100/520"
+                   alt="R&D 기반 특수 구조물" loading="lazy" decoding="async"
+                   class="w-full h-full object-cover svc-img">
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to top, #080808 0%, rgba(8,8,8,0.25) 50%, transparent 100%);"></div>
+              <div class="absolute inset-0"
+                   style="background: linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 60%);"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-7 lg:p-9">
+              <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-4"
+                    style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                ENGINEERED
+              </span>
+              <h3 class="font-display text-2xl font-bold text-white mb-2.5 ko"
+                  style="word-break: keep-all;">R&amp;D 기반 특수 구조물</h3>
+              <p class="text-white/45 text-sm leading-relaxed ko"
+                 style="max-width: 48ch; word-break: keep-all;">
+                기술 개발 협업, 비정형 구조, 특수 소재·공법. 표준 해법이 없는 구조 문제를 해결합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card G: PE Stamp badge card -->
+        <div class="reveal d1 card-outer">
+          <div class="card-inner p-7 lg:p-8 flex flex-col justify-between"
+               style="border-radius: calc(1.5rem - 5px); min-height: 200px;">
+            <div>
+              <iconify-icon icon="solar:diploma-bold" class="text-gold" width="30"></iconify-icon>
+              <p class="font-display text-4xl font-bold text-white mt-3 ko"
+                 style="word-break: keep-all; line-height: 1.2;">기술사<br>직접 날인</p>
+              <p class="text-white/42 text-sm mt-2.5 ko" style="word-break: keep-all;">모든 프로젝트에 건축구조기술사 날인 기본 포함</p>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] text-white/35"
+                    style="background: rgba(255,255,255,0.05);">구조 검토</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] text-white/35"
+                    style="background: rgba(255,255,255,0.05);">안전 확인</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] text-white/35"
+                    style="background: rgba(255,255,255,0.05);">법적 효력</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service footnote -->
+      <p class="reveal mt-6 text-center text-white/28 text-[12px] ko" style="word-break: keep-all;">
+        * 모든 프로젝트에 건축구조기술사 날인 기본 포함
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 4 · PORTFOLIO — Asymmetric masonry
+  ═══════════════════════════════════════════════ -->
+  <section id="work" style="background: #0c0c0c;" class="py-32 lg:py-44">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-12 lg:mb-14">
+        <div>
+          <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+               style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+            <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">포트폴리오</span>
+          </div>
+          <h2 class="reveal d1 font-display font-bold text-white"
+              style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.1;">
+            선별된<br>작업물
+          </h2>
+        </div>
+        <a href="#contact"
+           class="reveal d2 self-start lg:self-end flex items-center gap-2 text-white/40 hover:text-white text-sm"
+           style="transition: color 0.4s ease;">
+          프로젝트 문의하기
+          <iconify-icon icon="solar:arrow-right-up-linear" width="14"></iconify-icon>
+        </a>
+      </div>
+
+      <!-- Grid row 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+
+        <!-- Item 1: large -->
+        <div class="reveal md:col-span-7 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
+          <img src="assets/portfolio_1.png"
+               alt="UAM 이착륙장 솔루션" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 전남 고흥 | 항공우주연구원</p>
+            <h3 class="font-display text-2xl font-bold text-white">UAM 이착륙장 솔루션</h3>
+          </div>
+        </div>
+
+        <!-- Items 2&3: stacked -->
+        <div class="md:col-span-5 grid grid-cols-1 gap-4">
+          <div class="reveal d1 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
+            <img src="assets/portfolio_2.png"
+                 alt="대기방지 옥상 장비패드 솔루션" loading="lazy" decoding="async"
+                 class="w-full h-full object-cover">
+            <div class="portfolio-overlay"></div>
+            <div class="portfolio-info">
+              <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 경기 용인 | 삼성전자</p>
+              <h3 class="font-display text-xl font-bold text-white">대기방지 옥상 장비패드 솔루션</h3>
+            </div>
+          </div>
+          <div class="reveal d2 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
+            <img src="https://picsum.photos/seed/pascal-p3-canopy-outdoor/600/460"
+                 alt="야외 캐노피 구조물" loading="lazy" decoding="async"
+                 class="w-full h-full object-cover">
+            <div class="portfolio-overlay"></div>
+            <div class="portfolio-info">
+              <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">야외 구조물 — 인천 송도</p>
+              <h3 class="font-display text-xl font-bold text-white">송도 복합단지 진입 캐노피</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid row 2 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div class="reveal d1 md:col-span-5 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 16/10;">
+          <img src="https://picsum.photos/seed/pascal-p4-suspended-art/700/440"
+               alt="매달림 조형물" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">매달림 조형물 — 서울 강남</p>
+            <h3 class="font-display text-xl font-bold text-white">강남 갤러리 현수 설치 구조</h3>
+          </div>
+        </div>
+
+        <div class="reveal d2 md:col-span-7 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 16/10;">
+          <img src="https://picsum.photos/seed/pascal-p5-modular-pavilion/1000/625"
+               alt="모듈러 파빌리온" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 — 부산 해운대</p>
+            <h3 class="font-display text-2xl font-bold text-white">해운대 해변 모듈러 파빌리온</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 5 · PROMISE — Three commitments
+  ═══════════════════════════════════════════════ -->
+  <section style="background: #080808;" class="py-32 lg:py-44">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-12 lg:mb-14">
+        <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+             style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+          <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">PASCAL의 약속</span>
+        </div>
+        <h2 class="reveal d1 font-display font-bold text-white ko"
+            style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.1; word-break: keep-all;">
+          숫자로<br>증명하는 신뢰
+        </h2>
+      </div>
+
+      <!-- Three promise cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- P1: ±5mm -->
+        <div class="reveal card-outer">
+          <div class="card-inner p-8 lg:p-10 flex flex-col"
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
+            <iconify-icon icon="solar:ruler-cross-pen-bold" class="text-gold mb-6" width="28"></iconify-icon>
+            <p class="promise-num mb-3">±5mm</p>
+            <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
+              치수 정밀도 보장
+            </h3>
+            <p class="text-white/45 text-[14px] leading-relaxed ko flex-1" style="word-break: keep-all;">
+              설계 도면 대비 ±5mm 이내의 시공 정밀도를 목표로 합니다. DfMA 기반 공장 제작으로 현장 오차를 최소화합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- P2: 24H -->
+        <div class="reveal d1 card-outer">
+          <div class="card-inner p-8 lg:p-10 flex flex-col"
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
+            <iconify-icon icon="solar:clock-circle-bold" class="text-gold mb-6" width="28"></iconify-icon>
+            <p class="promise-num mb-3">24H</p>
+            <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
+              24시간 내 견적 회신
+            </h3>
+            <p class="text-white/45 text-[14px] leading-relaxed ko flex-1" style="word-break: keep-all;">
+              문의 접수 후 24시간 이내에 초기 검토 결과와 견적 방향을 회신합니다. 신속한 의사결정을 지원합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- P3: 5일 -->
+        <div class="reveal d2 card-outer">
+          <div class="card-inner p-8 lg:p-10 flex flex-col"
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
+            <iconify-icon icon="solar:calendar-check-bold" class="text-gold mb-6" width="28"></iconify-icon>
+            <p class="promise-num mb-3">5일</p>
+            <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
+              납기 준수
+            </h3>
+            <p class="text-white/45 text-[14px] leading-relaxed ko flex-1" style="word-break: keep-all;">
+              착공 전 5일 이내 완성된 구조 검토서와 제작 일정을 제공합니다. 공정 지연 없이 프로젝트를 완수합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 6 · PROCESS — Z-axis cascade cards
+  ═══════════════════════════════════════════════ -->
+  <section id="process" style="background: #0c0c0c;" class="py-32 lg:py-44">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-14 lg:mb-18 max-w-2xl">
+        <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+             style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+          <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">프로젝트 프로세스</span>
+        </div>
+        <h2 class="reveal d1 font-display font-bold text-white ko"
+            style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.12; word-break: keep-all;">
+          구조물이 완성되기까지의<br>여섯 단계
+        </h2>
+      </div>
+
+      <!-- Steps: Z-cascade on desktop -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+
+        <!-- Step 01: 상담 -->
+        <div class="reveal card-outer" style="transform: rotate(-0.35deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">01</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:chat-round-like-linear" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">상담</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  현장 환경, 하중 조건, 용도 목적을 파악합니다. 기존 구조체 검토와 현장 답사를 통해 프로젝트의 기술적 가능성을 확인합니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">1 — 3 일</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 02: 설계 -->
+        <div class="reveal d1 card-outer md:mt-6" style="transform: rotate(0.35deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">02</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:pen-new-round-linear" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">설계</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  클라이언트 요구사항을 반영한 구조 설계안을 수립합니다. 3D 모델링과 도면으로 시각화하여 방향성을 확정합니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">3 — 7 일</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 03: 구조검토 -->
+        <div class="reveal d2 card-outer" style="transform: rotate(0.25deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">03</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:diploma-linear" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">구조검토</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  건축구조기술사가 설계 전 과정을 직접 검토하고 날인합니다. 하중, 접합부, 안전율을 기준 이상으로 확인합니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">2 — 5 일</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 04: 제작 -->
+        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(-0.25deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">04</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:settings-bold-duotone" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">제작</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  DfMA 기반 공장 제작으로 현장 오차를 최소화합니다. Fabless 모델로 전문 제작사와 협력하여 품질과 납기를 관리합니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">프로젝트별 협의</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 05: 설치 -->
+        <div class="reveal d2 card-outer" style="transform: rotate(-0.2deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">05</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:hammer-linear" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">설치</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  현장 설치 전 과정을 기술사가 직접 감리합니다. 설계 의도가 현장에 그대로 구현되는지 확인하며 안전을 책임집니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">프로젝트별 협의</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 06: 완료 -->
+        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(0.2deg);">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+            <div class="flex items-start gap-5">
+              <span class="font-display text-[4.5rem] font-bold text-white leading-none"
+                    style="opacity: 0.06; flex-shrink: 0; line-height: 1;">06</span>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                       style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
+                    <iconify-icon icon="solar:check-circle-linear" class="text-gold" width="17"></iconify-icon>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-white">완료</h3>
+                </div>
+                <p class="text-white/42 text-[13.5px] leading-relaxed ko" style="word-break: keep-all;">
+                  최종 검수 후 완료 보고서와 기술사 날인 서류를 인도합니다. 사후 하자 발생 시 기술적 책임과 지원을 약속합니다.
+                </p>
+                <p class="text-gold/50 text-[11px] mt-4 uppercase tracking-[0.12em]">인수인계 완료</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 7 · ABOUT — Editorial split
+  ═══════════════════════════════════════════════ -->
+  <section id="about" style="background: #080808;" class="py-32 lg:py-44">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+        <!-- Left: Image -->
+        <div class="reveal order-2 lg:order-1">
+          <div class="card-outer">
+            <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
+              <div class="relative" style="aspect-ratio: 4/5;">
+                <img src="assets/director.png"
+                     alt="전용 대표이사 | 건축구조기술사" loading="lazy" decoding="async"
+                     class="w-full h-full object-cover svc-img">
+                <div class="absolute inset-0"
+                     style="background: linear-gradient(to top, rgba(8,8,8,0.45) 0%, transparent 50%);"></div>
+                <!-- Floating badge -->
+                <div class="absolute bottom-7 left-5 right-5">
+                  <div class="flex items-center gap-3 px-4 py-3.5 rounded-2xl"
+                       style="backdrop-filter: blur(20px); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); box-shadow: inset 0 1px 0 rgba(255,255,255,0.09);">
+                    <iconify-icon icon="solar:shield-check-bold" class="text-gold flex-shrink-0" width="22"></iconify-icon>
+                    <div>
+                      <p class="text-white font-semibold text-[13px]">건축구조기술사 · 대표이사</p>
+                      <p class="text-white/45 text-[11px] mt-0.5 ko"
+                         style="word-break: keep-all;">전 프로젝트를 기술사가 직접 검토하고 날인합니다</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Text -->
+        <div class="order-1 lg:order-2">
+          <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+               style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+            <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">회사 소개</span>
+          </div>
+          <h2 class="reveal d1 font-display font-bold text-white ko mb-2"
+              style="font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; word-break: keep-all;">
+            전용
+          </h2>
+          <p class="reveal d1 text-gold text-[15px] font-medium tracking-wide mb-6">건축구조기술사 · 대표이사</p>
+          <div class="reveal d2 space-y-4 text-white/45 leading-relaxed ko text-[14.5px]"
+               style="word-break: keep-all;">
+            <p>(주)파스칼은 건축구조기술사가 직접 이끄는 구조물 설계·제작 전문 기업입니다. 개구부 구조보강부터 R&amp;D 기반 특수 구조물까지, 표준 해법이 없는 구조 문제를 해결합니다.</p>
+            <p>DfMA(설계·제작·조립 일원화) 방식을 통해 설계와 제작 사이의 오차를 최소화하며, Fabless 모델로 전문 제작사와 협력하여 품질을 관리합니다.</p>
+          </div>
+
+          <!-- Feature checklist -->
+          <div class="reveal d3 mt-7 space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
+                   style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                <iconify-icon icon="solar:check-linear" class="text-gold" width="10"></iconify-icon>
+              </div>
+              <p class="text-white/55 text-[13.5px] ko" style="word-break: keep-all;">전 프로젝트 건축구조기술사 직접 검토 및 날인</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
+                   style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                <iconify-icon icon="solar:check-linear" class="text-gold" width="10"></iconify-icon>
+              </div>
+              <p class="text-white/55 text-[13.5px] ko" style="word-break: keep-all;">DfMA 기반 설계·제작 일원화 시스템</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
+                   style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                <iconify-icon icon="solar:check-linear" class="text-gold" width="10"></iconify-icon>
+              </div>
+              <p class="text-white/55 text-[13.5px] ko" style="word-break: keep-all;">Fabless 모델 — 검증된 제작사 네트워크 품질 관리</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
+                   style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
+                <iconify-icon icon="solar:check-linear" class="text-gold" width="10"></iconify-icon>
+              </div>
+              <p class="text-white/55 text-[13.5px] ko" style="word-break: keep-all;">개구부 보강부터 R&amp;D 특수 구조물까지 6종 전문 서비스</p>
+            </div>
+          </div>
+
+          <a href="#contact"
+             class="reveal d4 group mt-9 flex items-center gap-3 w-fit px-7 py-3.5 rounded-full font-semibold text-gold btn-ghost"
+             style="border: 1px solid rgba(201,169,110,0.35); transition: all 0.5s cubic-bezier(0.16,1,0.3,1);"
+             onmouseover="this.style.background='#C9A96E'; this.style.color='#080808';"
+             onmouseout="this.style.background='transparent'; this.style.color='#C9A96E';">
+            프로젝트 문의하기
+            <span class="w-7 h-7 rounded-full flex items-center justify-center arrow-wrap"
+                  style="background: rgba(201,169,110,0.12);">
+              <iconify-icon icon="solar:arrow-right-linear" width="13"></iconify-icon>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 8 · CTA — Full-bleed conversion
+  ═══════════════════════════════════════════════ -->
+  <section id="contact" class="relative py-40 lg:py-60 overflow-hidden" style="background: #050505;">
+
+    <!-- Mesh orbs -->
+    <div class="mesh-orb float-a w-[900px] h-[900px] bg-[#C9A96E] opacity-[0.04]"
+         style="top: 50%; left: 50%; transform: translate(-50%,-50%);"></div>
+    <div class="mesh-orb float-b w-[500px] h-[500px] bg-[#C9A96E] opacity-[0.035]"
+         style="top: -100px; right: -100px;"></div>
+    <div class="mesh-orb w-[350px] h-[350px] bg-[#C9A96E] opacity-[0.025]"
+         style="bottom: -80px; left: -80px; filter: blur(130px);"></div>
+
+    <!-- Top gradient line -->
+    <div class="absolute top-0 left-0 right-0 h-px"
+         style="background: linear-gradient(to right, transparent, rgba(201,169,110,0.35), transparent);"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+      <!-- Eyebrow -->
+      <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8"
+           style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+        <span class="w-1.5 h-1.5 rounded-full bg-gold"
+              style="animation: pulse 2s ease-in-out infinite;"></span>
+        <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">프로젝트 문의</span>
+      </div>
+
+      <!-- Headline -->
+      <h2 class="reveal d1 font-display font-bold text-white ko"
+          style="font-size: clamp(2.8rem, 7vw, 6rem); line-height: 1.05; word-break: keep-all;">
+        프로젝트를<br>
+        <span class="text-gold">시작</span>하시겠습니까?
+      </h2>
+
+      <!-- Sub-copy -->
+      <p class="reveal d2 text-white/40 leading-relaxed mt-6 mb-12 mx-auto ko"
+         style="font-size: 1rem; max-width: 48ch; word-break: keep-all;">
+        구조물 설계·제작이 필요하다면 지금 이야기를 시작하세요. 24시간 내 기술사가 직접 검토하여 회신합니다.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="reveal d3 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="mailto:info@pascal.or.kr"
+           class="group flex items-center justify-center gap-3 px-9 py-4 rounded-full bg-gold text-[#050505] font-semibold text-base btn-gold">
+          프로젝트 상담 시작하기
+          <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center arrow-wrap">
+            <iconify-icon icon="solar:arrow-right-linear" width="15"></iconify-icon>
+          </span>
+        </a>
+        <a href="tel:070-8287-2373"
+           class="flex items-center justify-center gap-2.5 px-9 py-4 rounded-full font-semibold text-base text-white/60 btn-ghost"
+           style="border: 1px solid rgba(255,255,255,0.14);">
+          <iconify-icon icon="solar:phone-linear" width="16"></iconify-icon>
+          070-8287-2373
+        </a>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="reveal d4 flex flex-wrap justify-center gap-x-7 gap-y-3 mt-14 pt-10"
+           style="border-top: 1px solid rgba(255,255,255,0.07);">
+        <div class="flex items-center gap-2 text-white/28 text-[13px]">
+          <iconify-icon icon="solar:shield-check-linear" width="14"></iconify-icon>
+          <span class="ko">건축구조기술사 날인 보장</span>
+        </div>
+        <div class="flex items-center gap-2 text-white/28 text-[13px]">
+          <iconify-icon icon="solar:clock-linear" width="14"></iconify-icon>
+          <span>24시간 내 회신</span>
+        </div>
+        <div class="flex items-center gap-2 text-white/28 text-[13px]">
+          <iconify-icon icon="solar:graph-up-linear" width="14"></iconify-icon>
+          <span class="ko">무료 초기 검토</span>
+        </div>
+        <div class="flex items-center gap-2 text-white/28 text-[13px]">
+          <iconify-icon icon="solar:document-linear" width="14"></iconify-icon>
+          <span class="ko">구조 검토서 제공</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom gradient line -->
+    <div class="absolute bottom-0 left-0 right-0 h-px"
+         style="background: linear-gradient(to right, transparent, rgba(201,169,110,0.2), transparent);"></div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 9 · FOOTER — Minimal rich
+  ═══════════════════════════════════════════════ -->
+  <footer style="background: #030303; border-top: 1px solid rgba(255,255,255,0.05);"
+          class="py-14 lg:py-18">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Top area -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-9 lg:gap-12 pb-10 mb-10"
+           style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+
+        <!-- Brand col -->
+        <div class="lg:col-span-2">
+          <p class="font-display font-bold text-2xl tracking-[0.2em] text-white mb-3">PASCAL</p>
+          <p class="text-white/30 text-[13px] leading-relaxed mb-6 ko"
+             style="max-width: 34ch; word-break: keep-all;">
+            건축구조기술사가 이끄는 구조물 설계·제작 전문 기업. 개구부 보강부터 특수 구조물까지.
+          </p>
+          <div class="flex items-center gap-2.5">
+            <a href="#" aria-label="인스타그램"
+               class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
+               style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
+               onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
+               onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
+              <iconify-icon icon="solar:instagram-linear" width="15"></iconify-icon>
+            </a>
+            <a href="#" aria-label="링크드인"
+               class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
+               style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
+               onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
+               onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
+              <iconify-icon icon="solar:linkedin-linear" width="15"></iconify-icon>
+            </a>
+            <a href="#" aria-label="유튜브"
+               class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
+               style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
+               onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
+               onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
+              <iconify-icon icon="solar:play-circle-linear" width="15"></iconify-icon>
+            </a>
+          </div>
+        </div>
+
+        <!-- Nav links -->
+        <div>
+          <p class="text-white/20 text-[10px] uppercase tracking-[0.2em] mb-5">탐색</p>
+          <ul class="space-y-3">
+            <li><a href="#services" class="text-white/42 text-[13px] hover:text-white" style="transition: color 0.3s ease;">서비스</a></li>
+            <li><a href="#work"     class="text-white/42 text-[13px] hover:text-white" style="transition: color 0.3s ease;">포트폴리오</a></li>
+            <li><a href="#process"  class="text-white/42 text-[13px] hover:text-white" style="transition: color 0.3s ease;">프로세스</a></li>
+            <li><a href="#about"    class="text-white/42 text-[13px] hover:text-white" style="transition: color 0.3s ease;">회사소개</a></li>
+            <li><a href="#contact"  class="text-white/42 text-[13px] hover:text-white" style="transition: color 0.3s ease;">문의하기</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <p class="text-white/20 text-[10px] uppercase tracking-[0.2em] mb-5">연락처</p>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-2 text-white/42 text-[13px]">
+              <iconify-icon icon="solar:map-point-linear" class="flex-shrink-0 mt-0.5" width="13"></iconify-icon>
+              <span class="ko" style="word-break: keep-all;">경기도 고양시 일산서구 고양대로 315 28동 206호</span>
+            </li>
+            <li class="flex items-center gap-2 text-white/42 text-[13px]">
+              <iconify-icon icon="solar:phone-linear" width="13"></iconify-icon>
+              <span>070-8287-2373</span>
+            </li>
+            <li class="flex items-center gap-2 text-white/42 text-[13px]">
+              <iconify-icon icon="solar:letter-linear" width="13"></iconify-icon>
+              <span>info@pascal.or.kr</span>
+            </li>
+            <li class="flex items-center gap-2 text-white/42 text-[13px]">
+              <iconify-icon icon="solar:clock-linear" width="13"></iconify-icon>
+              <span>평일 09:00 — 18:00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-white/18 text-[12px]">© 2026 PASCAL Inc. All rights reserved.</p>
+        <div class="flex items-center gap-5">
+          <a href="#" class="text-white/18 text-[12px] hover:text-white/40" style="transition: color 0.3s ease;">개인정보처리방침</a>
+          <a href="#" class="text-white/18 text-[12px] hover:text-white/40" style="transition: color 0.3s ease;">이용약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════════ -->
+  <script>
+    /* ── Mobile Menu ────────────────────────────── */
+    const mobileMenu  = document.getElementById('mobileMenu');
+    const menuToggle  = document.getElementById('menuToggle');
+    const menuClose   = document.getElementById('menuClose');
+
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', openMobileMenu);
+    menuClose.addEventListener('click', closeMobileMenu);
+
+    /* ── Scroll Reveal (IntersectionObserver) ───── */
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealEls.forEach(el => revealObs.observe(el));
+
+    /* ── Navbar scroll tint ─────────────────────── */
+    const navPill = document.getElementById('nav-pill');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 72) {
+        navPill.style.background    = 'rgba(8, 8, 8, 0.92)';
+        navPill.style.borderColor   = 'rgba(255,255,255,0.07)';
+      } else {
+        navPill.style.background    = 'rgba(255,255,255,0.05)';
+        navPill.style.borderColor   = 'rgba(255,255,255,0.09)';
+      }
+    }, { passive: true });
+
+    /* ── Service card image zoom ─────────────────── */
+    document.querySelectorAll('.svc-card').forEach(card => {
+      const img = card.querySelector('.svc-img');
+      if (!img) return;
+      card.addEventListener('mouseenter', () => { img.style.transform = 'scale(1.05)'; });
+      card.addEventListener('mouseleave', () => { img.style.transform = 'scale(1)'; });
+    });
+
+    /* ── Hero Scroll Canvas ──────────────────────── */
+    (function () {
+      const canvas  = document.getElementById('heroCanvas');
+      if (!canvas) return;
+      const ctx     = canvas.getContext('2d');
+      const loader  = document.getElementById('heroLoader');
+      const TOTAL   = 240;
+      const imgs    = new Array(TOTAL);
+      let loaded    = 0;
+      let current   = 0;
+      let firstShown = false;
+
+      function pad(n) { return String(n).padStart(4, '0'); }
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw(current);
+      }
+
+      function draw(idx) {
+        var img = imgs[idx];
+        if (!img || !img.complete || img.naturalWidth === 0) return;
+        var cw = canvas.width, ch = canvas.height;
+        var iw = img.naturalWidth,  ih = img.naturalHeight;
+        var scale = Math.max(cw / iw, ch / ih);
+        var dw = iw * scale, dh = ih * scale;
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      }
+
+      function onFrameLoad(idx) {
+        loaded++;
+        if (!firstShown && idx === 0) {
+          firstShown = true;
+          resize();
+          if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function () { loader.style.display = 'none'; }, 500);
+          }
+        }
+      }
+
+      for (var i = 0; i < TOTAL; i++) {
+        (function (idx) {
+          var img = new Image();
+          img.src = 'assets/hero_frames/frame_' + pad(idx + 1) + '.webp';
+          img.onload  = function () { onFrameLoad(idx); };
+          img.onerror = function () { loaded++; if (!firstShown && idx === 0) { firstShown = true; if (loader) { loader.style.opacity = '0'; setTimeout(function(){ loader.style.display='none'; }, 500); } } };
+          imgs[idx] = img;
+        })(i);
+      }
+
+      var heroSec = document.getElementById('hero-section');
+      window.addEventListener('scroll', function () {
+        if (!heroSec) return;
+        var scrollTop  = window.scrollY;
+        var secTop     = heroSec.offsetTop;
+        var scrollable = heroSec.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) return;
+        var progress = Math.max(0, Math.min(1, (scrollTop - secTop) / scrollable));
+        var idx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+        if (idx !== current) {
+          current = idx;
+          draw(current);
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', resize);
+      resize();
+    })();
+
+    /* ── Smooth scroll ───────────────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Pulse keyframe (inline fallback) ───────── */
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.4; }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+</body>
+</html>
