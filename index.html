@@ -538,11 +538,11 @@
         <div class="reveal d1 card-outer svc-card cursor-pointer">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
             <div class="relative overflow-hidden" style="height: 180px;">
-              <img src="assets/interior.png"
+              <img src="assets/service_interior.png"
                    alt="실내 구조물 설치" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
             </div>
             <div class="p-6 lg:p-7">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -567,11 +567,11 @@
         <div class="reveal card-outer svc-card cursor-pointer">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
             <div class="relative overflow-hidden" style="height: 180px;">
-              <img src="https://picsum.photos/seed/pascal-outdoor-canopy/600/360"
+              <img src="assets/service_outdoor.png"
                    alt="야외 구조물·조형물" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
             </div>
             <div class="p-6 lg:p-7">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -592,11 +592,11 @@
         <div class="reveal d1 card-outer svc-card cursor-pointer">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
             <div class="relative overflow-hidden" style="height: 180px;">
-              <img src="https://picsum.photos/seed/pascal-suspended-ceiling/600/360"
+              <img src="assets/service_suspended.png"
                    alt="매달림 구조물·조형물" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
             </div>
             <div class="p-6 lg:p-7">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -621,7 +621,7 @@
                    alt="모듈러 구조 시스템" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 60%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
             </div>
             <div class="p-6 lg:p-7">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -726,69 +726,117 @@
         </a>
       </div>
 
-      <!-- Grid row 1 -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+      <!-- Row A: 2+1 — 와이드 히어로 + 세로 카드 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
 
-        <!-- Item 1: large -->
-        <div class="reveal md:col-span-7 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
+        <!-- Card 1: col-span-2, 히어로 -->
+        <div class="reveal lg:col-span-2 portfolio-item rounded-2xl cursor-pointer" style="min-height: 520px;">
           <img src="assets/portfolio_1.png"
-               alt="UAM 이착륙장 솔루션" loading="lazy" decoding="async"
+               alt="고흥 UAM 이착륙장 솔루션 / 설치" loading="lazy" decoding="async"
                class="w-full h-full object-cover">
           <div class="portfolio-overlay"></div>
           <div class="portfolio-info">
-            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 전남 고흥 | 항공우주연구원</p>
-            <h3 class="font-display text-2xl font-bold text-white">UAM 이착륙장 솔루션</h3>
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 전남 고흥 | KARI[한국항공우주연구원]</p>
+            <h3 class="font-display text-2xl font-bold text-white">고흥 UAM 이착륙장 솔루션 / 설치</h3>
           </div>
         </div>
 
-        <!-- Items 2&3: stacked -->
-        <div class="md:col-span-5 grid grid-cols-1 gap-4">
-          <div class="reveal d1 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
-            <img src="assets/portfolio_2.png"
-                 alt="대기방지 옥상 장비패드 솔루션" loading="lazy" decoding="async"
-                 class="w-full h-full object-cover">
-            <div class="portfolio-overlay"></div>
-            <div class="portfolio-info">
-              <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 경기 용인 | 삼성전자</p>
-              <h3 class="font-display text-xl font-bold text-white">대기방지 옥상 장비패드 솔루션</h3>
+        <!-- Card 2: col-span-1 — 전동스크린 골조 보강 (멀티이미지 3장 수직 스택) -->
+        <div class="reveal d2 portfolio-item rounded-2xl cursor-pointer" style="overflow: hidden;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="height: 240px; overflow: hidden; background: #080808;">
+              <img src="assets/portfolio_7_1.png"
+                   alt="전동스크린 골조 보강 1" loading="lazy" decoding="async"
+                   class="w-full h-full object-contain" style="background: #080808;">
+            </div>
+            <div style="height: 240px; overflow: hidden; background: #080808;">
+              <img src="assets/portfolio_7_2.png"
+                   alt="전동스크린 골조 보강 2" loading="lazy" decoding="async"
+                   class="w-full h-full object-contain" style="background: #080808;">
+            </div>
+            <div style="height: 240px; overflow: hidden; background: #080808;">
+              <img src="assets/portfolio_7_3.png"
+                   alt="전동스크린 골조 보강 3" loading="lazy" decoding="async"
+                   class="w-full h-full object-contain" style="background: #080808;">
             </div>
           </div>
-          <div class="reveal d2 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 4/3;">
-            <img src="https://picsum.photos/seed/pascal-p3-canopy-outdoor/600/460"
-                 alt="야외 캐노피 구조물" loading="lazy" decoding="async"
-                 class="w-full h-full object-cover">
-            <div class="portfolio-overlay"></div>
-            <div class="portfolio-info">
-              <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">야외 구조물 — 인천 송도</p>
-              <h3 class="font-display text-xl font-bold text-white">송도 복합단지 진입 캐노피</h3>
-            </div>
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">매달림 구조물·조형물 — 프랑스 파리 | 주프랑스 한국문화원</p>
+            <h3 class="font-display text-xl font-bold text-white">전동스크린 골조 보강</h3>
           </div>
         </div>
+
       </div>
 
-      <!-- Grid row 2 -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div class="reveal d1 md:col-span-5 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 16/10;">
-          <img src="https://picsum.photos/seed/pascal-p4-suspended-art/700/440"
-               alt="매달림 조형물" loading="lazy" decoding="async"
+      <!-- Row B: 1+1+1 — 세 등분 스트립 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+        <!-- Card 3 -->
+        <div class="reveal portfolio-item rounded-2xl cursor-pointer" style="height: 380px;">
+          <img src="assets/portfolio_3.png"
+               alt="신월동 주택 대수선 보강공사" loading="lazy" decoding="async"
                class="w-full h-full object-cover">
           <div class="portfolio-overlay"></div>
           <div class="portfolio-info">
-            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">매달림 조형물 — 서울 강남</p>
-            <h3 class="font-display text-xl font-bold text-white">강남 갤러리 현수 설치 구조</h3>
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">개구부 구조보강 — 서울 양천구 | 치읓건축사사무소</p>
+            <h3 class="font-display text-lg font-bold text-white">신월동 주택 대수선 개구부 보강</h3>
           </div>
         </div>
 
-        <div class="reveal d2 md:col-span-7 portfolio-item rounded-2xl cursor-pointer" style="aspect-ratio: 16/10;">
-          <img src="https://picsum.photos/seed/pascal-p5-modular-pavilion/1000/625"
-               alt="모듈러 파빌리온" loading="lazy" decoding="async"
+        <!-- Card 4 -->
+        <div class="reveal d1 portfolio-item rounded-2xl cursor-pointer" style="height: 380px;">
+          <img src="assets/portfolio_4.png"
+               alt="KIST 야외 조형물 / 기초 설치" loading="lazy" decoding="async"
                class="w-full h-full object-cover">
           <div class="portfolio-overlay"></div>
           <div class="portfolio-info">
-            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 — 부산 해운대</p>
-            <h3 class="font-display text-2xl font-bold text-white">해운대 해변 모듈러 파빌리온</h3>
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">야외 구조물·조형물 — 서울 성북구 | KIST</p>
+            <h3 class="font-display text-lg font-bold text-white">KIST 야외 조형물 / 기초 설치</h3>
           </div>
         </div>
+
+        <!-- Card 5 -->
+        <div class="reveal d2 portfolio-item rounded-2xl cursor-pointer" style="height: 380px;">
+          <img src="assets/portfolio_2.png"
+               alt="대기방지 옥상 장비패드 솔루션" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 경기 용인 | 삼성전자</p>
+            <h3 class="font-display text-lg font-bold text-white">대기방지 옥상 장비패드 솔루션</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row C: 1+2 — 와이드 클로징 (Row A의 미러) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- Card 6: col-span-1 -->
+        <div class="reveal portfolio-item rounded-2xl cursor-pointer" style="height: 460px;">
+          <img src="assets/portfolio_6.jpg"
+               alt="청라 UAM 이착륙장 솔루션 / 설치" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">모듈러 구조 시스템 — 인천 서구 | KARI[한국항공우주연구원]</p>
+            <h3 class="font-display text-xl font-bold text-white">청라 UAM 이착륙장 솔루션 / 설치</h3>
+          </div>
+        </div>
+
+        <!-- Card 7: col-span-2 -->
+        <div class="reveal d1 lg:col-span-2 portfolio-item rounded-2xl cursor-pointer" style="height: 460px;">
+          <img src="assets/portfolio_5.png"
+               alt="잭니클라우스 GC 구조물 / 기초 설치" loading="lazy" decoding="async"
+               class="w-full h-full object-cover">
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-info">
+            <p class="text-gold text-[11px] uppercase tracking-[0.15em] mb-1.5">야외 구조물·조형물 — 인천 연수구 | POSCO</p>
+            <h3 class="font-display text-2xl font-bold text-white">잭니클라우스 GC 구조물 / 기초 설치</h3>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
