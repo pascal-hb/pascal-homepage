@@ -50,7 +50,7 @@
       inset: 0;
       z-index: 60;
       pointer-events: none;
-      opacity: 0.3;
+      opacity: 0.2;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 180px;
@@ -136,6 +136,7 @@
     .mobile-menu.open .mm-link:nth-child(3) { transition-delay: 0.22s; }
     .mobile-menu.open .mm-link:nth-child(4) { transition-delay: 0.29s; }
     .mobile-menu.open .mm-link:nth-child(5) { transition-delay: 0.36s; }
+    .mobile-menu.open .mm-link:nth-child(6) { transition-delay: 0.43s; }
 
     /* Marquee */
     .marquee-container { overflow: hidden; white-space: nowrap; }
@@ -270,6 +271,7 @@
       <div class="hidden md:flex items-center gap-5">
         <a href="#services"   class="nav-link text-[13px] text-white/55 hover:text-white">서비스</a>
         <a href="#work"       class="nav-link text-[13px] text-white/55 hover:text-white">포트폴리오</a>
+        <a href="#promise"    class="nav-link text-[13px] text-white/55 hover:text-white">약속</a>
         <a href="#process"    class="nav-link text-[13px] text-white/55 hover:text-white">프로세스</a>
         <a href="#about"      class="nav-link text-[13px] text-white/55 hover:text-white">회사소개</a>
       </div>
@@ -305,6 +307,7 @@
     <div class="flex flex-col items-center gap-7">
       <a href="#services" class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">서비스</a>
       <a href="#work"     class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">포트폴리오</a>
+      <a href="#promise"  class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">약속</a>
       <a href="#process"  class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">프로세스</a>
       <a href="#about"    class="mm-link font-display text-4xl font-light text-white/75 hover:text-white" onclick="closeMobileMenu()">회사소개</a>
       <a href="#contact"
@@ -511,7 +514,7 @@
         <div class="reveal lg:col-span-2 card-outer svc-card cursor-pointer" style="position: relative;">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
             <div class="relative overflow-hidden" style="height: 340px;">
-              <img src="https://picsum.photos/seed/pascal-opening-rebar/1100/680"
+              <img src="assets/service_opening.png"
                    alt="개구부 구조보강" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
@@ -542,9 +545,9 @@
                    alt="실내 구조물 설치" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 15%);"></div>
             </div>
-            <div class="p-6 lg:p-7">
+            <div class="p-6 lg:p-7" style="background: rgba(8,8,8,0.0);">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
                     style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
                 INTERIOR
@@ -571,9 +574,9 @@
                    alt="야외 구조물·조형물" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 15%);"></div>
             </div>
-            <div class="p-6 lg:p-7">
+            <div class="p-6 lg:p-7" style="background: rgba(8,8,8,0.0);">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
                     style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
                 OUTDOOR
@@ -596,9 +599,9 @@
                    alt="매달림 구조물·조형물" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 15%);"></div>
             </div>
-            <div class="p-6 lg:p-7">
+            <div class="p-6 lg:p-7" style="background: rgba(8,8,8,0.0);">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
                     style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
                 SUSPENDED
@@ -617,13 +620,13 @@
         <div class="reveal d2 card-outer svc-card cursor-pointer">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
             <div class="relative overflow-hidden" style="height: 180px;">
-              <img src="https://picsum.photos/seed/pascal-modular-booth/600/360"
+              <img src="assets/service_modular.png"
                    alt="모듈러 구조 시스템" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
-                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 30%);"></div>
+                   style="background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 15%);"></div>
             </div>
-            <div class="p-6 lg:p-7">
+            <div class="p-6 lg:p-7" style="background: rgba(8,8,8,0.0);">
               <span class="inline-block px-3 py-1 rounded-full text-gold text-[11px] uppercase tracking-[0.15em] mb-3"
                     style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.22);">
                 MODULAR
@@ -645,8 +648,8 @@
         <!-- Card F: ENGINEERED (lg col-span-2) -->
         <div class="reveal lg:col-span-2 card-outer svc-card cursor-pointer" style="position: relative;">
           <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px);">
-            <div class="relative overflow-hidden" style="height: 260px;">
-              <img src="https://picsum.photos/seed/pascal-engineered-special/1100/520"
+            <div class="relative overflow-hidden" style="height: 340px;">
+              <img src="assets/service_engineered.png"
                    alt="R&D 기반 특수 구조물" loading="lazy" decoding="async"
                    class="w-full h-full object-cover svc-img">
               <div class="absolute inset-0"
@@ -672,7 +675,7 @@
         <!-- Card G: PE Stamp badge card -->
         <div class="reveal d1 card-outer">
           <div class="card-inner p-7 lg:p-8 flex flex-col justify-between"
-               style="border-radius: calc(1.5rem - 5px); min-height: 200px;">
+               style="border-radius: calc(1.5rem - 5px); min-height: 340px;">
             <div>
               <iconify-icon icon="solar:diploma-bold" class="text-gold" width="30"></iconify-icon>
               <p class="font-display text-4xl font-bold text-white mt-3 ko"
@@ -743,21 +746,21 @@
 
         <!-- Card 2: col-span-1 — 전동스크린 골조 보강 (멀티이미지 3장 수직 스택) -->
         <div class="reveal d2 portfolio-item rounded-2xl cursor-pointer" style="overflow: hidden;">
-          <div style="display: flex; flex-direction: column; gap: 5px;">
-            <div style="height: 240px; overflow: hidden; background: #080808;">
+          <div style="display: flex; flex-direction: column; gap: 5px; border-radius: 1rem; overflow: hidden;">
+            <div style="height: 240px; overflow: hidden; border-radius: 0.75rem;">
               <img src="assets/portfolio_7_1.png"
                    alt="전동스크린 골조 보강 1" loading="lazy" decoding="async"
-                   class="w-full h-full object-contain" style="background: #080808;">
+                   class="w-full h-full object-cover">
             </div>
-            <div style="height: 240px; overflow: hidden; background: #080808;">
+            <div style="height: 240px; overflow: hidden; border-radius: 0.75rem;">
               <img src="assets/portfolio_7_2.png"
                    alt="전동스크린 골조 보강 2" loading="lazy" decoding="async"
-                   class="w-full h-full object-contain" style="background: #080808;">
+                   class="w-full h-full object-cover">
             </div>
-            <div style="height: 240px; overflow: hidden; background: #080808;">
+            <div style="height: 240px; overflow: hidden; border-radius: 0.75rem;">
               <img src="assets/portfolio_7_3.png"
                    alt="전동스크린 골조 보강 3" loading="lazy" decoding="async"
-                   class="w-full h-full object-contain" style="background: #080808;">
+                   class="w-full h-full object-cover">
             </div>
           </div>
           <div class="portfolio-overlay"></div>
@@ -845,7 +848,7 @@
   <!-- ═══════════════════════════════════════════════
        SECTION 5 · PROMISE — Three commitments
   ═══════════════════════════════════════════════ -->
-  <section style="background: #080808;" class="py-32 lg:py-44">
+  <section id="promise" style="background: #080808;" class="py-32 lg:py-44">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Header -->
@@ -864,9 +867,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         <!-- P1: ±5mm -->
-        <div class="reveal card-outer">
+        <div class="reveal card-outer" style="height: 100%;">
           <div class="card-inner p-8 lg:p-10 flex flex-col"
-               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px; height: 100%;">
             <iconify-icon icon="solar:ruler-cross-pen-bold" class="text-gold mb-6" width="28"></iconify-icon>
             <p class="promise-num mb-3">±5mm</p>
             <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
@@ -879,9 +882,9 @@
         </div>
 
         <!-- P2: 24H -->
-        <div class="reveal d1 card-outer">
+        <div class="reveal d1 card-outer" style="height: 100%;">
           <div class="card-inner p-8 lg:p-10 flex flex-col"
-               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px; height: 100%;">
             <iconify-icon icon="solar:clock-circle-bold" class="text-gold mb-6" width="28"></iconify-icon>
             <p class="promise-num mb-3">24H</p>
             <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
@@ -894,10 +897,10 @@
         </div>
 
         <!-- P3: 5일 -->
-        <div class="reveal d2 card-outer">
+        <div class="reveal d2 card-outer" style="height: 100%;">
           <div class="card-inner p-8 lg:p-10 flex flex-col"
-               style="border-radius: calc(1.5rem - 5px); min-height: 320px;">
-            <iconify-icon icon="solar:calendar-check-bold" class="text-gold mb-6" width="28"></iconify-icon>
+               style="border-radius: calc(1.5rem - 5px); min-height: 320px; height: 100%;">
+            <iconify-icon icon="solar:calendar-mark-bold" class="text-gold mb-6" width="28"></iconify-icon>
             <p class="promise-num mb-3">5일</p>
             <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
               납기 준수
@@ -934,8 +937,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
 
         <!-- Step 01: 상담 -->
-        <div class="reveal card-outer" style="transform: rotate(-0.35deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal card-outer" style="transform: rotate(-0.35deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">01</span>
@@ -957,8 +960,8 @@
         </div>
 
         <!-- Step 02: 설계 -->
-        <div class="reveal d1 card-outer md:mt-6" style="transform: rotate(0.35deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal d1 card-outer md:mt-6" style="transform: rotate(0.35deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">02</span>
@@ -980,8 +983,8 @@
         </div>
 
         <!-- Step 03: 구조검토 -->
-        <div class="reveal d2 card-outer" style="transform: rotate(0.25deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal d2 card-outer" style="transform: rotate(0.25deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">03</span>
@@ -1003,8 +1006,8 @@
         </div>
 
         <!-- Step 04: 제작 -->
-        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(-0.25deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(-0.25deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">04</span>
@@ -1026,8 +1029,8 @@
         </div>
 
         <!-- Step 05: 설치 -->
-        <div class="reveal d2 card-outer" style="transform: rotate(-0.2deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal d2 card-outer" style="transform: rotate(-0.2deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">05</span>
@@ -1035,7 +1038,7 @@
                 <div class="flex items-center gap-3 mb-4">
                   <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                        style="background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);">
-                    <iconify-icon icon="solar:hammer-linear" class="text-gold" width="17"></iconify-icon>
+                    <iconify-icon icon="solar:settings-bold" class="text-gold" width="17"></iconify-icon>
                   </div>
                   <h3 class="font-display text-xl font-bold text-white">설치</h3>
                 </div>
@@ -1049,8 +1052,8 @@
         </div>
 
         <!-- Step 06: 완료 -->
-        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(0.2deg);">
-          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px);">
+        <div class="reveal d3 card-outer md:mt-6" style="transform: rotate(0.2deg); height: 100%;">
+          <div class="card-inner p-7 lg:p-9" style="border-radius: calc(1.5rem - 5px); height: 100%;">
             <div class="flex items-start gap-5">
               <span class="font-display text-[4.5rem] font-bold text-white leading-none"
                     style="opacity: 0.06; flex-shrink: 0; line-height: 1;">06</span>
@@ -1218,7 +1221,7 @@
 
       <!-- CTA Buttons -->
       <div class="reveal d3 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="mailto:info@pascal.or.kr"
+        <a href="mailto:yjeon@pascal.or.kr"
            class="group flex items-center justify-center gap-3 px-9 py-4 rounded-full bg-gold text-[#050505] font-semibold text-base btn-gold">
           프로젝트 상담 시작하기
           <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center arrow-wrap">
@@ -1280,26 +1283,26 @@
             건축구조기술사가 이끄는 구조물 설계·제작 전문 기업. 개구부 보강부터 특수 구조물까지.
           </p>
           <div class="flex items-center gap-2.5">
-            <a href="#" aria-label="인스타그램"
+            <a href="https://pf.kakao.com/_RNqAX" aria-label="카카오톡 채널" target="_blank" rel="noopener noreferrer"
                class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
                style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
                onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
                onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
-              <iconify-icon icon="solar:instagram-linear" width="15"></iconify-icon>
+              <img src="assets/seo_kakaotalk.png" alt="카카오톡 채널" style="width: 24px; height: 24px; object-fit: contain;">
             </a>
-            <a href="#" aria-label="링크드인"
+            <a href="https://www.instagram.com/root.fdn" aria-label="인스타그램" target="_blank" rel="noopener noreferrer"
                class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
                style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
                onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
                onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
-              <iconify-icon icon="solar:linkedin-linear" width="15"></iconify-icon>
+              <img src="assets/seo_instagram.png" alt="인스타그램" style="width: 24px; height: 24px; object-fit: contain;">
             </a>
-            <a href="#" aria-label="유튜브"
+            <a href="https://www.youtube.com/@뿌리기초" aria-label="유튜브" target="_blank" rel="noopener noreferrer"
                class="w-9 h-9 rounded-full flex items-center justify-center text-white/35 hover:text-white"
                style="border: 1px solid rgba(255,255,255,0.09); transition: all 0.4s ease;"
                onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';"
                onmouseout="this.style.borderColor='rgba(255,255,255,0.09)';">
-              <iconify-icon icon="solar:play-circle-linear" width="15"></iconify-icon>
+              <img src="assets/seo_youtube.png" alt="유튜브" style="width: 96px; height: 96px; object-fit: contain;">
             </a>
           </div>
         </div>
@@ -1330,7 +1333,7 @@
             </li>
             <li class="flex items-center gap-2 text-white/42 text-[13px]">
               <iconify-icon icon="solar:letter-linear" width="13"></iconify-icon>
-              <span>info@pascal.or.kr</span>
+              <span>yjeon@pascal.or.kr</span>
             </li>
             <li class="flex items-center gap-2 text-white/42 text-[13px]">
               <iconify-icon icon="solar:clock-linear" width="13"></iconify-icon>
@@ -1343,10 +1346,6 @@
       <!-- Bottom bar -->
       <div class="flex flex-col md:flex-row items-center justify-between gap-3">
         <p class="text-white/18 text-[12px]">© 2026 PASCAL Inc. All rights reserved.</p>
-        <div class="flex items-center gap-5">
-          <a href="#" class="text-white/18 text-[12px] hover:text-white/40" style="transition: color 0.3s ease;">개인정보처리방침</a>
-          <a href="#" class="text-white/18 text-[12px] hover:text-white/40" style="transition: color 0.3s ease;">이용약관</a>
-        </div>
       </div>
     </div>
   </footer>
