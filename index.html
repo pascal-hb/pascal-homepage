@@ -138,17 +138,6 @@
     .mobile-menu.open .mm-link:nth-child(5) { transition-delay: 0.36s; }
     .mobile-menu.open .mm-link:nth-child(6) { transition-delay: 0.43s; }
 
-    /* Marquee */
-    .marquee-container { overflow: hidden; white-space: nowrap; }
-    .marquee-track {
-      display: inline-flex;
-      animation: marquee 38s linear infinite;
-    }
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
     /* Portfolio hover */
     .portfolio-item { position: relative; overflow: hidden; }
     .portfolio-item img {
@@ -250,6 +239,113 @@
       line-height: 1;
       color: #C9A96E;
     }
+
+    /* ── Contact Form ─────────────────────────── */
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .form-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.5rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9375rem;
+      font-family: 'Pretendard', sans-serif;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-field::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+
+    .form-field:focus {
+      border-color: rgba(201,169,110,0.6);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .form-field option {
+      background: #1a1a2e;
+      color: #fff;
+    }
+
+    /* Date picker */
+    .form-field[type="date"]::-webkit-calendar-picker-indicator {
+      filter: brightness(0) invert(0.55) sepia(1) saturate(1.5) hue-rotate(5deg);
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .form-field[type="date"] {
+      color-scheme: dark;
+    }
+
+    /* Checkbox group grid */
+    .cf-subgroup {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .cf-check {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.875rem;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .cf-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1.5px solid rgba(201,169,110,0.4);
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .cf-check input[type="checkbox"]:checked {
+      background: #C9A96E;
+      border-color: #C9A96E;
+    }
+
+    .cf-check input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #050505;
+      border-left: none;
+      border-top: none;
+      transform: rotate(45deg);
+    }
+
+    #cf-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
   </style>
 </head>
 <body>
@@ -374,7 +470,7 @@
             <!-- Sub-copy -->
             <p class="reveal d2 ko text-white/45 leading-relaxed mt-6 mb-10"
                style="font-size: 1rem; max-width: 50ch; word-break: keep-all;">
-              설계부터 제작까지 — 건축구조기술사가 이끄는 맞춤형 구조물 설계·제작 전문 기업. 모든 프로젝트를 기술사가 직접 검토하고 날인합니다.
+              설계부터 제작까지 — 건축구조기술사가 이끄는 맞춤형 구조물 설계·제작 전문 기업.<br>모든 프로젝트를 기술사가 직접 검토하고 날인합니다.
             </p>
 
             <!-- CTA Buttons -->
@@ -427,63 +523,6 @@
 
 
   <!-- ═══════════════════════════════════════════════
-       SECTION 2 · CLIENT TRUST STRIP — Marquee
-  ═══════════════════════════════════════════════ -->
-  <section style="background: #0c0c0c; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);"
-           class="py-10 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-7">
-      <p class="text-center text-white/22 text-[10px] uppercase tracking-[0.28em]">함께한 파트너사</p>
-    </div>
-
-    <div class="marquee-container">
-      <div class="marquee-track">
-        <span class="inline-flex items-center gap-12 px-6">
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">현대건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">삼성물산</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">DL이앤씨</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">GS건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">포스코이앤씨</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">롯데건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">HDC현대산업개발</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">SK에코플랜트</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">한화건설</span>
-          <span class="text-white/10 text-xl">/</span>
-        </span>
-        <!-- Duplicate for seamless loop -->
-        <span class="inline-flex items-center gap-12 px-6">
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">현대건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">삼성물산</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">DL이앤씨</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">GS건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">포스코이앤씨</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">롯데건설</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">HDC현대산업개발</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">SK에코플랜트</span>
-          <span class="text-white/10 text-xl">/</span>
-          <span class="font-display text-xl font-light text-white/22 hover:text-white/55 cursor-default" style="transition: color 0.4s ease;">한화건설</span>
-          <span class="text-white/10 text-xl">/</span>
-        </span>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════════════════════════════════════
        SECTION 3 · SERVICES — Asymmetric Bento Grid
   ═══════════════════════════════════════════════ -->
   <section id="services" style="background: #080808;" class="py-32 lg:py-44">
@@ -502,7 +541,7 @@
           </h2>
           <p class="reveal d2 text-white/38 text-sm leading-relaxed ko"
              style="max-width: 38ch; word-break: keep-all;">
-            각 구조물의 하중 조건과 환경을 분석하고, 기술사가 직접 검토한 설계를 제작까지 일원화합니다.
+            각 구조물의 하중 조건과 환경을 분석하고,<br>기술사가 직접 검토한 설계를 제작까지 일원화합니다.
           </p>
         </div>
       </div>
@@ -718,8 +757,12 @@
           </div>
           <h2 class="reveal d1 font-display font-bold text-white"
               style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.1;">
-            선별된<br>작업물
+            선별된 작업물
           </h2>
+          <p class="reveal d2 text-white/38 text-sm leading-relaxed ko mt-4"
+             style="max-width: 38ch; word-break: keep-all;">
+            PASCAL이 수행한 실제 프로젝트입니다.
+          </p>
         </div>
         <a href="#contact"
            class="reveal d2 self-start lg:self-end flex items-center gap-2 text-white/40 hover:text-white text-sm"
@@ -846,6 +889,69 @@
 
 
   <!-- ═══════════════════════════════════════════════
+       SECTION 4.5 · VIDEO — Homepage video
+  ═══════════════════════════════════════════════ -->
+  <section id="video" style="background: #080808;" class="py-32 lg:py-44">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-10 lg:mb-14 text-center">
+        <div class="reveal inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+             style="border: 1px solid rgba(201,169,110,0.3); background: rgba(201,169,110,0.06);">
+          <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">PASCAL WORKS</span>
+        </div>
+        <h2 class="reveal d1 font-display font-bold text-white ko"
+            style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.12; word-break: keep-all;">
+          구조물이 만들어지는 과정
+        </h2>
+        <p class="reveal d2 text-white/38 text-sm leading-relaxed ko mt-4"
+           style="word-break: keep-all;">
+          설계부터 설치 완료까지, PASCAL의 작업 현장을 담았습니다.
+        </p>
+      </div>
+
+      <!-- Video Container -->
+      <div class="reveal d1 card-outer">
+        <div class="card-inner overflow-hidden" style="border-radius: calc(1.5rem - 5px); position: relative;">
+          <div style="
+            position: absolute;
+            inset: 0;
+            background: rgba(8,8,8,0.35);
+            pointer-events: none;
+            border-radius: calc(1.5rem - 5px);
+            z-index: 1;
+          "></div>
+          <div style="
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              to bottom,
+              rgba(8,8,8,0.6) 0%,
+              transparent 20%,
+              transparent 80%,
+              rgba(8,8,8,0.6) 100%
+            );
+            pointer-events: none;
+            border-radius: calc(1.5rem - 5px);
+            z-index: 2;
+          "></div>
+          <video
+            src="assets/homepage_video.mp4"
+            autoplay
+            muted
+            controls
+            loop
+            playsinline
+            style="width: 100%; display: block; border-radius: calc(1.5rem - 5px); z-index: 0;"
+          ></video>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
        SECTION 5 · PROMISE — Three commitments
   ═══════════════════════════════════════════════ -->
   <section id="promise" style="background: #080808;" class="py-32 lg:py-44">
@@ -888,10 +994,10 @@
             <iconify-icon icon="solar:clock-circle-bold" class="text-gold mb-6" width="28"></iconify-icon>
             <p class="promise-num mb-3">24H</p>
             <h3 class="font-display text-xl font-bold text-white mb-3 ko" style="word-break: keep-all;">
-              24시간 내 견적 회신
+              24시간 내 회신
             </h3>
             <p class="text-white/45 text-[14px] leading-relaxed ko flex-1" style="word-break: keep-all;">
-              문의 접수 후 24시간 이내에 초기 검토 결과와 견적 방향을 회신합니다. 신속한 의사결정을 지원합니다.
+              문의 접수 후 24시간 이내에 기술사가 직접 연락하여 무료로 프로젝트 방향을 함께 논의해드립니다.
             </p>
           </div>
         </div>
@@ -1120,7 +1226,7 @@
             <span class="text-gold text-[11px] uppercase tracking-[0.22em] font-medium">회사 소개</span>
           </div>
           <h2 class="reveal d1 font-display font-bold text-white ko mb-2"
-              style="font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; word-break: keep-all;">
+              style="font-size: clamp(2.2rem, 4.5vw, 3.75rem); line-height: 1.12; word-break: keep-all;">
             전용
           </h2>
           <p class="reveal d1 text-gold text-[15px] font-medium tracking-wide mb-6">건축구조기술사 · 대표이사</p>
@@ -1216,18 +1322,133 @@
       <!-- Sub-copy -->
       <p class="reveal d2 text-white/40 leading-relaxed mt-6 mb-12 mx-auto ko"
          style="font-size: 1rem; max-width: 48ch; word-break: keep-all;">
-        구조물 설계·제작이 필요하다면 지금 이야기를 시작하세요. 24시간 내 기술사가 직접 검토하여 회신합니다.
+        구조물 설계·제작이 필요하다면 지금 이야기를 시작하세요.<br>24시간 내 기술사가 직접 연락드립니다.
       </p>
 
-      <!-- CTA Buttons -->
-      <div class="reveal d3 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="mailto:yjeon@pascal.or.kr"
-           class="group flex items-center justify-center gap-3 px-9 py-4 rounded-full bg-gold text-[#050505] font-semibold text-base btn-gold">
-          프로젝트 상담 시작하기
-          <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center arrow-wrap">
-            <iconify-icon icon="solar:arrow-right-linear" width="15"></iconify-icon>
-          </span>
-        </a>
+      <!-- Contact Form -->
+      <form id="contactForm" action="https://api.web3forms.com/submit" method="POST"
+            class="reveal d3 mt-12 mx-auto text-left"
+            style="max-width: 42rem;">
+        <input type="hidden" name="access_key" value="09376b67-313e-436d-a3fb-9526591199a8">
+        <input type="hidden" name="subject" value="PASCAL 홈페이지 문의">
+        <input type="hidden" name="redirect" value="false">
+        <div class="grid gap-6">
+
+          <!-- ① 이름 + ② 연락처 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label for="cf-name" class="form-label">이름 <span style="color:#C9A96E;">*</span></label>
+              <input id="cf-name" name="name" type="text" required placeholder="홍길동" class="form-field">
+            </div>
+            <div>
+              <label for="cf-phone" class="form-label">연락처 <span style="color:#C9A96E;">*</span></label>
+              <input id="cf-phone" name="phone" type="tel" required placeholder="010-0000-0000" class="form-field">
+            </div>
+          </div>
+
+          <!-- ③ 이메일 + ④ 소속 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label for="cf-email" class="form-label">이메일 <span style="color:#C9A96E;">*</span></label>
+              <input id="cf-email" name="email" type="email" required placeholder="example@email.com" class="form-field">
+            </div>
+            <div>
+              <label for="cf-company" class="form-label">소속 / 회사명</label>
+              <input id="cf-company" name="company" type="text" placeholder="(주)파스칼" class="form-field">
+            </div>
+          </div>
+
+          <!-- ⑤ 프로젝트 유형 -->
+          <div>
+            <label for="cf-type" class="form-label">프로젝트 유형 <span style="color:#C9A96E;">*</span></label>
+            <select id="cf-type" name="projectType" required class="form-field">
+              <option value="" disabled selected>선택해주세요</option>
+              <option value="개구부 구조보강">개구부 구조보강</option>
+              <option value="실내 구조물 설치">실내 구조물 설치</option>
+              <option value="야외 구조물·조형물">야외 구조물·조형물</option>
+              <option value="매달림 구조물·조형물">매달림 구조물·조형물</option>
+              <option value="모듈러 구조 시스템">모듈러 구조 시스템</option>
+              <option value="R&D / 특수 구조물">R&D / 특수 구조물</option>
+            </select>
+          </div>
+
+          <!-- ⑥ 세부 선택 -->
+          <div id="cf-subtype-wrap" style="display:none; opacity:0; transition: opacity 0.3s ease;">
+            <label class="form-label">세부 선택 <span style="color:#C9A96E;">*</span></label>
+
+            <div id="sub-opening" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="벽체 개구부"><span>벽체 개구부</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="슬래브 개구부"><span>슬래브 개구부</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+
+            <div id="sub-interior" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="계단·난간"><span>계단·난간</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="파티션·스크린"><span>파티션·스크린</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="기타 금속 구조물"><span>기타 금속 구조물</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+
+            <div id="sub-outdoor" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="옥상"><span>옥상</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="외벽·파사드"><span>외벽·파사드</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="지상"><span>지상</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+
+            <div id="sub-suspended" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="설치미술·전시"><span>설치미술·전시</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="사인·조형물"><span>사인·조형물</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="기능성 구조물"><span>기능성 구조물</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+
+            <div id="sub-modular" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="모듈러 유닛 건축물"><span>모듈러 유닛 건축물</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="뿌리기초"><span>뿌리기초</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="파사드·외장 시스템"><span>파사드·외장 시스템</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="반복 설치형 구조물"><span>반복 설치형 구조물</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+
+            <div id="sub-rnd" class="cf-subgroup" style="display:none;">
+              <label class="cf-check"><input type="checkbox" name="subtype" value="아이디어 단계"><span>아이디어 단계</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="설계 진행 중"><span>설계 진행 중</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="제작 단계"><span>제작 단계</span></label>
+              <label class="cf-check"><input type="checkbox" name="subtype" value="잘 모르겠음"><span>잘 모르겠음</span></label>
+            </div>
+          </div>
+
+          <!-- ⑦ 납기 희망일 -->
+          <div>
+            <label for="cf-deadline" class="form-label">납기 희망일</label>
+            <input id="cf-deadline" name="deadline" type="date" class="form-field">
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="cf-submit"
+                  class="group flex items-center justify-center gap-3 px-9 py-4 rounded-full bg-gold text-[#050505] font-semibold text-base btn-gold w-full"
+                  disabled>
+            <span id="cf-submit-text">문의 접수하기</span>
+            <span class="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center arrow-wrap">
+              <iconify-icon icon="solar:arrow-right-linear" width="15"></iconify-icon>
+            </span>
+          </button>
+
+        </div>
+      </form>
+
+      <!-- Success Message -->
+      <div id="cf-success" class="mt-12 mx-auto text-center" style="max-width: 42rem; display:none;">
+        <div style="padding: 3rem 2rem; border: 1px solid rgba(201,169,110,0.3); border-radius: 1rem; background: rgba(201,169,110,0.05);">
+          <iconify-icon icon="solar:check-circle-linear" width="48" style="color:#C9A96E;"></iconify-icon>
+          <p class="mt-4 ko" style="color:#C9A96E; font-size: 1.125rem; font-weight: 600;">문의가 접수되었습니다.</p>
+          <p class="mt-2 ko" style="color: rgba(255,255,255,0.5); font-size: 0.875rem;">24시간 내에 연락드리겠습니다.</p>
+        </div>
+      </div>
+
+      <!-- Phone CTA -->
+      <div class="reveal d4 flex justify-center mt-8">
         <a href="tel:070-8287-2373"
            class="flex items-center justify-center gap-2.5 px-9 py-4 rounded-full font-semibold text-base text-white/60 btn-ghost"
            style="border: 1px solid rgba(255,255,255,0.14);">
@@ -1493,6 +1714,134 @@
         }
       });
     });
+
+    /* ── Contact Form ────────────────────────────── */
+    (function () {
+      var form         = document.getElementById('contactForm');
+      var successEl    = document.getElementById('cf-success');
+      var submitBtn    = document.getElementById('cf-submit');
+      var submitText   = document.getElementById('cf-submit-text');
+      var typeSelect   = document.getElementById('cf-type');
+      var subtypeWrap  = document.getElementById('cf-subtype-wrap');
+      var deadlineInput = document.getElementById('cf-deadline');
+
+      if (!form) return;
+
+      // Set date min to today
+      var today = new Date().toISOString().split('T')[0];
+      if (deadlineInput) deadlineInput.min = today;
+
+      var subtypeMap = {
+        '개구부 구조보강':      'sub-opening',
+        '실내 구조물 설치':     'sub-interior',
+        '야외 구조물·조형물':   'sub-outdoor',
+        '매달림 구조물·조형물': 'sub-suspended',
+        '모듈러 구조 시스템':   'sub-modular',
+        'R&D / 특수 구조물':    'sub-rnd',
+      };
+
+      function showSubtype(typeValue) {
+        // Clear all subgroups
+        document.querySelectorAll('.cf-subgroup').forEach(function (g) {
+          g.style.display = 'none';
+          g.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+            cb.checked = false;
+          });
+        });
+
+        var targetId = subtypeMap[typeValue];
+        if (!targetId) {
+          subtypeWrap.style.opacity = '0';
+          setTimeout(function () { subtypeWrap.style.display = 'none'; }, 300);
+          validateForm();
+          return;
+        }
+
+        var targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        subtypeWrap.style.display = 'block';
+        // Force reflow to trigger transition
+        void subtypeWrap.offsetHeight;
+        subtypeWrap.style.opacity = '1';
+        targetEl.style.display = 'grid';
+        validateForm();
+      }
+
+      function validateForm() {
+        var name  = document.getElementById('cf-name').value.trim();
+        var phone = document.getElementById('cf-phone').value.trim();
+        var email = document.getElementById('cf-email').value.trim();
+        var type  = typeSelect.value;
+
+        var subtypeOk = true;
+        if (type) {
+          // Subtype is required — check at least one box checked in visible group
+          var anyChecked = false;
+          document.querySelectorAll('.cf-subgroup').forEach(function (g) {
+            if (g.style.display !== 'none') {
+              g.querySelectorAll('input[type="checkbox"]:checked').forEach(function () {
+                anyChecked = true;
+              });
+            }
+          });
+          subtypeOk = anyChecked;
+        } else {
+          subtypeOk = false;
+        }
+
+        var valid = name && phone && email && type && subtypeOk;
+        submitBtn.disabled = !valid;
+      }
+
+      typeSelect.addEventListener('change', function () {
+        showSubtype(this.value);
+      });
+
+      ['cf-name', 'cf-phone', 'cf-email'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', validateForm);
+      });
+
+      document.querySelectorAll('.cf-subgroup input[type="checkbox"]').forEach(function (cb) {
+        cb.addEventListener('change', validateForm);
+      });
+
+      // Formspree AJAX submission
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitText.textContent = '접수 중...';
+
+        var data = new FormData(form);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' },
+        })
+        .then(function (res) {
+          if (res.ok) {
+            form.style.display = 'none';
+            successEl.style.display = 'block';
+          } else {
+            res.json().then(function (json) {
+              submitText.textContent = '문의 접수하기';
+              validateForm();
+              alert(json.errors ? json.errors.map(function(e){return e.message;}).join('\n') : '제출 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            }).catch(function () {
+              submitText.textContent = '문의 접수하기';
+              validateForm();
+              alert('제출 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            });
+          }
+        })
+        .catch(function () {
+          submitText.textContent = '문의 접수하기';
+          validateForm();
+          alert('네트워크 오류가 발생했습니다. 이메일(info@pascal.or.kr)로 직접 문의해 주세요.');
+        });
+      });
+    })();
 
     /* ── Pulse keyframe (inline fallback) ───────── */
     const style = document.createElement('style');
